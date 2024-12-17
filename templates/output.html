@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Emails</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F5F5F5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .envelope-background {
+            position: absolute;
+            top: -30px;
+            left: -30px;
+            right: -30px;
+            bottom: -30px;
+            background-color: #FFFFFF;
+            clip-path: polygon(20% 0%, 80% 0%, 100% 15%, 100% 85%, 80% 100%, 20% 100%, 0% 85%, 0% 15%);
+            background-image: linear-gradient(to right, rgba(128, 0, 0, 0.1) 0%, rgba(128, 0, 0, 0.3) 100%);
+            transform: rotate(-5deg);
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #800000;
+            font-weight: 600;
+            margin-right: 15px;
+            text-align: center;
+        }
+
+        .envelope-icon {
+            color: #800000;
+            font-size: 32px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #FFF5F5;
+            border: 2px solid #800000;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(128, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(128, 0, 0, 0.2);
+        }
+
+        li p {
+            text-align: left;
+            margin: 8px 0;
+        }
+
+        .spam {
+            color: #800000;
+            font-weight: bold;
+        }
+
+        .not-spam {
+            color: #006400;
+            font-weight: bold;
+        }
+
+        .mini-envelopes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .mini-envelope {
+            position: absolute;
+            color: #800000;
+            opacity: 0.1;
+            font-size: 20px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .decorative-envelopes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #FFFFFF;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent 0,
+                transparent 10px,
+                rgba(128, 0, 0, 0.05) 10px,
+                rgba(128, 0, 0, 0.05) 20px
+            );
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="envelope-background"></div>
+        <div class="decorative-envelopes"></div>
+        <div class="mini-envelopes">
+            <i class="fas fa-envelope mini-envelope" style="top: 10%; left: 10%; animation: float 3s infinite;"></i>
+            <i class="fas fa-envelope mini-envelope" style="top: 20%; left: 80%; animation: float 4s infinite;"></i>
+            <i class="fas fa-envelope mini-envelope" style="top: 70%; left: 15%; animation: float 3.5s infinite;"></i>
+            <i class="fas fa-envelope mini-envelope" style="top: 60%; left: 85%; animation: float 4.5s infinite;"></i>
+            <i class="fas fa-envelope mini-envelope" style="top: 40%; left: 50%; animation: float 5s infinite;"></i>
+        </div>
+        <div class="content">
+            <div class="title-container">
+                <h1>Top Emails</h1>
+                <i class="fas fa-envelope envelope-icon"></i>
+            </div>
+            <p>Displaying the top {{ session['email_count'] }} email snippets and their spam status:</p>
+            <ul>
+                {% for email in email_data %}
+                <li>
+                    <p><strong>Snippet:</strong> {{ email.snippet }}</p>
+                    <p><strong>Status:</strong> <span class="{{ email.class }}">{{ email.spam_status }}</span></p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
